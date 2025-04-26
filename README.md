@@ -123,5 +123,5 @@ end)
 NullFireButton.MouseButton1Click:Connect(function()
     showFullScreenMessage("Script Null Fire")
     -- CODE: Thêm đoạn mã của bạn vào đây
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/your-script-here/null-fire/main/script.lua'))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"))()
 end)
