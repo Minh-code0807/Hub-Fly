@@ -2,6 +2,7 @@ local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local Button1 = Instance.new("TextButton")
 local Button2 = Instance.new("TextButton")
+local NotificationLabel = Instance.new("TextLabel") -- Thêm một TextLabel để hiển thị thông báo
 
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
@@ -27,6 +28,17 @@ Button2.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
 Button2.Text = "Chạy mã"
 Button2.Parent = Frame
 
+-- Cài đặt cho NotificationLabel
+NotificationLabel.Size = UDim2.new(0, 200, 0, 50)
+NotificationLabel.Position = UDim2.new(0.5, -100, 0.5, -150)
+NotificationLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+NotificationLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+NotificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+NotificationLabel.TextScaled = true
+NotificationLabel.Text = "By-YTB-Minh_VngEdGBAZQ"
+NotificationLabel.Visible = false
+NotificationLabel.Parent = ScreenGui
+
 local isMinimized = false
 
 Button1.MouseButton1Click:Connect(function()
@@ -39,6 +51,12 @@ Button1.MouseButton1Click:Connect(function()
 end)
 
 Button2.MouseButton1Click:Connect(function()
+    -- Hiển thị thông báo trong 5 giây
+    NotificationLabel.Visible = true
+    wait(5) -- Chờ 5 giây
+    NotificationLabel.Visible = false
+
+    -- Chạy đoạn mã
     print("Đoạn mã 1 được chạy!")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AmareScripts/DeadRails/refs/heads/main/Bypass%25AntiCheat.lua"))()
     print("Đoạn mã 2 được chạy!")
