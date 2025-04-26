@@ -1,64 +1,127 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Tạo GUI
 local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "ControlPanelGui"
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
+
 local Frame = Instance.new("Frame")
-local Button1 = Instance.new("TextButton")
-local Button2 = Instance.new("TextButton")
-local NotificationLabel = Instance.new("TextLabel") -- Thêm một TextLabel để hiển thị thông báo
-
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-Frame.Size = UDim2.new(0, 200, 0, 200)
-Frame.Position = UDim2.new(0.5, -100, 0.5, -100)
-Frame.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
-Frame.Active = true
-Frame.Draggable = true
+Frame.Size = UDim2.new(0.3, 0, 0.3, 0)
+Frame.Position = UDim2.new(0.35, 0, 0.35, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+Frame.BorderSizePixel = 1
+Frame.Active = true -- Cho phép kéo
+Frame.Draggable = true -- Kích hoạt tính năng kéo
 Frame.Parent = ScreenGui
 
-Button1.Size = UDim2.new(0, 100, 0, 50)
-Button1.Position = UDim2.new(0.5, -50, 0, -60)
-Button1.AnchorPoint = Vector2.new(0.5, 0.5)
-Button1.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-Button1.Text = "Thu nhỏ/Phóng to"
-Button1.Parent = Frame
+-- Tạo chữ toàn màn hình
+local FullScreenText = Instance.new("TextLabel")
+FullScreenText.Size = UDim2.new(1, 0, 1, 0)
+FullScreenText.Position = UDim2.new(0, 0, 0, 0)
+FullScreenText.Text = ""
+FullScreenText.Font = Enum.Font.SourceSansBold
+FullScreenText.TextSize = 50
+FullScreenText.TextColor3 = Color3.fromRGB(0, 0, 0)
+FullScreenText.BackgroundTransparency = 1
+FullScreenText.Visible = false
+FullScreenText.Parent = ScreenGui
 
-Button2.Size = UDim2.new(0, 100, 0, 50)
-Button2.Position = UDim2.new(0.5, -50, 0, 60)
-Button2.AnchorPoint = Vector2.new(0.5, 0.5)
-Button2.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
-Button2.Text = "Chạy mã"
-Button2.Parent = Frame
+local function showFullScreenMessage(message)
+    FullScreenText.Text = message
+    FullScreenText.Visible = true
+    task.delay(3, function()
+        FullScreenText.Visible = false
+    end)
+end
 
--- Cài đặt cho NotificationLabel
-NotificationLabel.Size = UDim2.new(0, 200, 0, 50)
-NotificationLabel.Position = UDim2.new(0.5, -100, 0.5, -150)
-NotificationLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-NotificationLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-NotificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-NotificationLabel.TextScaled = true
-NotificationLabel.Text = "By-YTB-Minh_VngEdGBAZQ"
-NotificationLabel.Visible = false
-NotificationLabel.Parent = ScreenGui
+-- Tạo nút "Phóng to / Thu nhỏ"
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+ToggleButton.Position = UDim2.new(0.3, 0, 0.05, 0)
+ToggleButton.Text = "Phóng to / Thu nhỏ"
+ToggleButton.Font = Enum.Font.SourceSansBold
+ToggleButton.TextSize = 18
+ToggleButton.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.Parent = Frame
 
+local buttons = {} -- Danh sách các nút ngoại trừ nút "Phóng to / Thu nhỏ"
+
+-- Tạo nút "Super Fly"
+local SuperFlyButton = Instance.new("TextButton")
+SuperFlyButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+SuperFlyButton.Position = UDim2.new(0.3, 0, 0.25, 0)
+SuperFlyButton.Text = "Super Fly"
+SuperFlyButton.Font = Enum.Font.SourceSansBold
+SuperFlyButton.TextSize = 18
+SuperFlyButton.BackgroundColor3 = Color3.fromRGB(100, 100, 200)
+SuperFlyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SuperFlyButton.Parent = Frame
+table.insert(buttons, SuperFlyButton)
+
+-- Tạo nút "XuanVp HUD"
+local XuanVpButton = Instance.new("TextButton")
+XuanVpButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+XuanVpButton.Position = UDim2.new(0.3, 0, 0.5, 0)
+XuanVpButton.Text = "XuanVp HUD"
+XuanVpButton.Font = Enum.Font.SourceSansBold
+XuanVpButton.TextSize = 18
+XuanVpButton.BackgroundColor3 = Color3.fromRGB(200, 100, 100)
+XuanVpButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+XuanVpButton.Parent = Frame
+table.insert(buttons, XuanVpButton)
+
+-- Tạo nút "Null Fire"
+local NullFireButton = Instance.new("TextButton")
+NullFireButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+NullFireButton.Position = UDim2.new(0.3, 0, 0.75, 0)
+NullFireButton.Text = "Null Fire"
+NullFireButton.Font = Enum.Font.SourceSansBold
+NullFireButton.TextSize = 18
+NullFireButton.BackgroundColor3 = Color3.fromRGB(150, 50, 250)
+NullFireButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+NullFireButton.Parent = Frame
+table.insert(buttons, NullFireButton)
+
+-- Biến trạng thái để theo dõi trạng thái ẩn/hiện
 local isMinimized = false
 
-Button1.MouseButton1Click:Connect(function()
-    if isMinimized then
-        Frame.Size = UDim2.new(0, 200, 0, 200)
-    else
-        Frame.Size = UDim2.new(0, 100, 0, 100)
+-- Xử lý sự kiện khi nhấn nút "Phóng to / Thu nhỏ"
+ToggleButton.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized -- Đổi trạng thái
+
+    for _, button in ipairs(buttons) do
+        button.Visible = not isMinimized -- Ẩn hoặc hiện các nút khác
     end
-    isMinimized = not isMinimized
+
+    if isMinimized then
+        Frame.Size = UDim2.new(0.3, 0, 0.1, 0) -- Thu nhỏ kích thước của bảng
+    else
+        Frame.Size = UDim2.new(0.3, 0, 0.4, 0) -- Phóng to kích thước của bảng
+    end
 end)
 
-Button2.MouseButton1Click:Connect(function()
-    -- Hiển thị thông báo trong 5 giây
-    NotificationLabel.Visible = true
-    wait(5) -- Chờ 5 giây
-    NotificationLabel.Visible = false
-
-    -- Chạy đoạn mã
-    print("Đoạn mã 1 được chạy!")
+-- Xử lý sự kiện khi nhấn nút "Super Fly"
+SuperFlyButton.MouseButton1Click:Connect(function()
+    showFullScreenMessage("Script Fly")
+    -- CODE 1: Thêm đoạn mã đầu tiên của bạn vào đây
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AmareScripts/DeadRails/refs/heads/main/Bypass%25AntiCheat.lua"))()
-    print("Đoạn mã 2 được chạy!")
+
+    -- CODE 2: Thêm đoạn mã thứ hai của bạn vào đây
     loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Vehicle%20Fly%20Gui'))()
+end)
+
+-- Xử lý sự kiện khi nhấn nút "XuanVp HUD"
+XuanVpButton.MouseButton1Click:Connect(function()
+    showFullScreenMessage("Script XuanVp")
+    -- CODE: Thêm đoạn mã của bạn vào đây
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/XUANVNPRO/XuanVPHUB/refs/heads/main/XuanVPPHUB.lua.txt"))()
+end)
+
+-- Xử lý sự kiện khi nhấn nút "Null Fire"
+NullFireButton.MouseButton1Click:Connect(function()
+    showFullScreenMessage("Script Null Fire")
+    -- CODE: Thêm đoạn mã của bạn vào đây
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/your-script-here/null-fire/main/script.lua'))()
 end)
