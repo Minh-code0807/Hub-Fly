@@ -1,0 +1,136 @@
+-- Tạo ScreenGui để hiển thị giao diện
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "DraggableUIWithNamedButtons"
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") -- Đưa vào giao diện của người chơi
+
+-- Tạo Frame (khung) để kéo
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 200) -- Kích thước khung (300x200 pixels)
+frame.Position = UDim2.new(0.5, -150, 0.5, -100) -- Vị trí ban đầu (giữa màn hình)
+frame.AnchorPoint = Vector2.new(0.5, 0.5) -- Căn giữa
+frame.BackgroundColor3 = Color3.fromRGB(100, 100, 255) -- Màu xanh dương nhạt
+frame.BorderSizePixel = 2 -- Độ dày viền
+frame.Parent = screenGui -- Đưa Frame vào giao diện
+
+-- Tạo TextLabel để hiển thị dòng chữ
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, 0, 0, 30) -- Chiều cao 30 pixels, phủ toàn bộ chiều ngang
+textLabel.Position = UDim2.new(0, 0, 0, 0) -- Vị trí trên cùng
+textLabel.BackgroundTransparency = 1 -- Nền trong suốt
+textLabel.Text = "By Minh_VngEdGBAZQ" -- Nội dung chữ đã thay đổi
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- Màu chữ trắng
+textLabel.Font = Enum.Font.SourceSansBold -- Font chữ
+textLabel.TextScaled = true -- Tự động điều chỉnh kích thước chữ
+textLabel.Parent = frame -- Gắn TextLabel vào Frame
+
+-- Tạo 6 nút dưới cùng
+local buttonSize = UDim2.new(0, 60, 0, 40) -- Kích thước mỗi nút (60x40 pixels)
+local buttonSpacing = 10 -- Khoảng cách giữa các nút
+local startX = (frame.Size.X.Offset - (6 * buttonSize.X.Offset + 5 * buttonSpacing)) / 2 -- Vị trí X bắt đầu để căn giữa
+local buttons = {} -- Lưu danh sách các nút để thao tác
+
+-- Danh sách tên nút
+local buttonNames = {
+    "Phóng to/Thu nhỏ", -- Nút 1
+    "Fort Constitution", -- Nút 2
+    "Castle",            -- Nút 3
+    "Sterling",          -- Nút 4
+    "Tesla Lab",         -- Nút 5
+    "XuanVp hub tp error" -- Nút 6
+}
+
+for i = 1, 6 do
+    local button = Instance.new("TextButton")
+    button.Size = buttonSize
+    button.Position = UDim2.new(0, startX + (i - 1) * (buttonSize.X.Offset + buttonSpacing), 1, -50) -- Căn chỉnh nút
+    button.AnchorPoint = Vector2.new(0, 1) -- Neo vào đáy của Frame
+    button.BackgroundColor3 = Color3.fromRGB(255, 100, 100) -- Màu đỏ nhạt
+    button.Text = buttonNames[i] -- Đặt tên cho nút
+    button.TextScaled = true -- Chữ tự động điều chỉnh kích cỡ
+    button.Parent = frame -- Gắn nút vào Frame
+    table.insert(buttons, button) -- Thêm nút vào bảng danh sách
+
+    -- Thêm chức năng cho từng nút
+    if i == 1 then
+        -- Nút "Phóng to/Thu nhỏ"
+        local isLarge = false -- Trạng thái khung (phóng to/thu nhỏ)
+        button.MouseButton1Click:Connect(function()
+            isLarge = not isLarge -- Đảo trạng thái
+            if isLarge then
+                frame.Size = UDim2.new(0, 400, 0, 300) -- Phóng to khung
+            else
+                frame.Size = UDim2.new(0, 300, 0, 200) -- Thu nhỏ khung
+            end
+        end)
+    elseif i == 2 then
+        -- Nút "Fort Constitution"
+        button.MouseButton1Click:Connect(function()
+            print("Fort Constitution button clicked!")
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"))()
+        end)
+    elseif i == 3 then
+        -- Nút "Castle"
+        button.MouseButton1Click:Connect(function()
+            print("Castle button clicked!")
+           (2) Castle :
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"))()
+        end)
+    elseif i == 4 then
+        -- Nút "Sterling"
+        button.MouseButton1Click:Connect(function()
+            print("Sterling button clicked!")
+            (3) Sterling :  
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/ringtaa/sterlingnotifcation.github.io/refs/heads/main/Sterling.lua'))()
+        end)
+    elseif i == 5 then
+        -- Nút "Tesla Lab"
+        button.MouseButton1Click:Connect(function()
+            print("Tesla Lab button clicked!")
+           loadstring(game:HttpGet('https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua'))()
+        end)
+    elseif i == 6 then
+        -- Nút "XuanVp hub tp error"
+        button.MouseButton1Click:Connect(function()
+            print("XuanVp hub tp error button clicked!")
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/XUANVNPRO/XuanVPHUB/refs/heads/main/XuanVPPHUB.lua.txt"))()
+        end)
+    end
+end
+
+-- Tạo tính năng kéo thả
+local dragging = false
+local dragInput, mousePos, framePos
+
+-- Hàm bắt đầu kéo
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then -- Kiểm tra nếu người chơi nhấn chuột trái
+        dragging = true
+        mousePos = input.Position
+        framePos = frame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+-- Hàm kéo
+frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+-- Cập nhật vị trí khung khi kéo
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - mousePos
+        frame.Position = UDim2.new(
+            framePos.X.Scale,
+            framePos.X.Offset + delta.X,
+            framePos.Y.Scale,
+            framePos.Y.Offset + delta.Y
+        )
+    end
+end)
